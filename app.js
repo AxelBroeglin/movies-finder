@@ -49,6 +49,8 @@ const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 const searchURL = BASE_URL + '/search/movie?'+API_KEY;
 
 const main = document.getElementById('main');
+const form = document.getElementById('form');
+const search = document.getElementById('search');
 
 getMovies(API_URL);
 
@@ -70,7 +72,6 @@ function showMovies(data){
         movieElt.innerHTML = 
             '<img src="' + IMG_URL+movie.poster_path + '" alt="' + movie.title + '"><div class="movie-info"><h3>' + movie.title + '</h3><span class="' + getColor(movie.vote_average) + '">' + movie.vote_average + '</span></div><div class="overview"><h3>Overview</h3>'+ movie.overview + '</div>'
         main.appendChild(movieElt);
-        console.log(movieElt);
     });
 }
 
@@ -83,3 +84,13 @@ function getColor(vote){
         return 'red';
     }
 }
+
+form.addEventListener('submit', (e) =>{
+    e.preventDefault();
+
+    const searchTerm = search.value;
+
+    if(searchTerm) {
+        getMovies(searchURL+'&query='+searchTerm);
+    }
+})
