@@ -1,43 +1,85 @@
 
-const moviesList = document.getElementById('charactersList');
-let movies = [];
+// const moviesList = document.getElementById('charactersList');
+// let movies = [];
 
-const loadMovies = async () => {
-    try {
-        const res = await fetch('https://api.themoviedb.org/3/movie/550?api_key=6306a5921402700a1b44ea0634197368');
-        movies = await res.json();
-        displayMovies(movies);
-    } catch (err) {
-        console.error(err);
+// const loadMovies = async () => {
+//     try {
+//         const res = await fetch('https://api.themoviedb.org/3/movie/550?api_key=6306a5921402700a1b44ea0634197368');
+//         movies = await res.json();
+//         displayMovies(movies);
+//     } catch (err) {
+//         console.error(err);
+//     }
+// };
+
+// const displayMovies = (films) => {
+//     const htmlString = Array.from(films)
+//         .map((film) => {
+//             return `
+//             <li class="character">
+//                 <h2>${film.name}</h2>
+//                 <p>House: ${film.genres.name}</p>
+//             </li>
+//         `;
+//         })
+//         .join('');
+//     moviesList.innerHTML = htmlString;
+// };
+
+// loadMovies();
+
+// const searchBar = document.getElementById("searchBar");
+
+// searchBar.addEventListener("keydown", e => {
+//   const searchString = e.target.value.toLowerCase();
+//   const filteredCharacters = movies.filter(film => {
+//     return (
+//       film.name.toLowerCase().includes(searchString) ||
+//       film.genres.names.toLowerCase().includes(searchString)
+//     );
+//   });
+//   displayMovies(filteredCharacters);
+// });
+
+
+const API_KEY = 'api_key=6306a5921402700a1b44ea0634197368';
+const BASE_URL = 'https://api.themoviedb.org/3';
+const API_URL = BASE_URL + '/discover/movie?sort_by=popularity.desc&'+API_KEY;
+const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+const searchURL = BASE_URL + '/search/movie?'+API_KEY;
+
+const main = document.getElementById('main');
+
+getMovies(API_URL);
+
+function getMovies(url){
+    fetch(url).then(res => res.json()).then(data => {
+
+        showMovies(data.results);
+        }    
+    )
+}
+
+function showMovies(data){
+
+    main.innerHTML = '';
+    data.forEach(movie => {
+        // Object destructuring : get a chosen set of info from an object
+        const movieElt = document.createElement('div');
+        movieElt.classList.add('movie');
+        movieElt.innerHTML = 
+            '<img src="' + IMG_URL+movie.poster_path + '" alt="' + movie.title + '"><div class="movie-info"><h3>' + movie.title + '</h3><span class="' + getColor(movie.vote_average) + '">' + movie.vote_average + '</span></div><div class="overview"><h3>Overview</h3>'+ movie.overview + '</div>'
+        main.appendChild(movieElt);
+        console.log(movieElt);
+    });
+}
+
+function getColor(vote){
+    if(vote >=8){
+        return 'green';
+    }else if(vote >=5){
+        return 'orange';
+    }else{
+        return 'red';
     }
-};
-
-const displayMovies = (films) => {
-    const htmlString = Array.from(films)
-        .map((film) => {
-            return `
-            <li class="character">
-                <h2>${film.name}</h2>
-                <p>House: ${film.genres.name}</p>
-            </li>
-        `;
-        })
-        .join('');
-    moviesList.innerHTML = htmlString;
-};
-
-loadMovies();
-
-const searchBar = document.getElementById("searchBar");
-
-searchBar.addEventListener("keydown", e => {
-  const searchString = e.target.value.toLowerCase();
-  const filteredCharacters = movies.filter(film => {
-    return (
-      film.name.toLowerCase().includes(searchString) ||
-      film.genres.names.toLowerCase().includes(searchString)
-    );
-  });
-  displayMovies(filteredCharacters);
-});
-
+}
