@@ -3,7 +3,7 @@
 }
 
 body{
-    background-color: var($dark-blue);
+    background-color: $dark-blue;
     font-family: 'Poppins', sans-serif;
     margin: 0;
 }
@@ -13,12 +13,12 @@ header{
     padding:1rem;
     display:flex;
     justify-content: flex-end;
-    background-color: var($grey-blue);
+    background-color: $grey-blue;
 }
 
 .search{
     background-color: transparent;
-    border: 2px solid var($dark-blue);
+    border: 2px solid $dark-blue;
     padding:0.5rem 1rem;
     border-radius: 50px;
     font-size: 1rem;
@@ -28,7 +28,7 @@ header{
 
 .search:focus{
     outline:0;
-    background-color: var($dark-blue);
+    background-color: $dark-blue;
 }
 
 .search::placeholder{
@@ -46,7 +46,7 @@ main{
     margin: 1rem;
     border-radius: 3px;
     box-shadow: 0.2px 4px 5px rgba(0,0,0,0.1);
-    background-color: var($grey-blue);
+    background-color: $grey-blue;
     position:relative;
     overflow: hidden;
 }
@@ -70,7 +70,7 @@ main{
 }
 
 .movie-info span{
-    background-color: var($dark-blue);
+    background-color: $dark-blue;
     padding: 0.25rem 0.5rem;
     border-radius: 3px;
     font-weight: bold;
