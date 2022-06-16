@@ -2,16 +2,16 @@
 // const moviesList = document.getElementById('charactersList');
 // let movies = [];
 
-const loadMovies = async () => {
-    try {
-        const res = await fetch('https://api.themoviedb.org/3/movie/550?api_key=6306a5921402700a1b44ea0634197368');
-        movies = await res.json();
-        displayMovies(movies);
-        console.log(movies);
-    } catch (err) {
-        console.error(err);
-    }
-};
+// const loadMovies = async () => {
+//     try {
+//         const res = await fetch('https://api.themoviedb.org/3/movie/550?api_key=6306a5921402700a1b44ea0634197368');
+//         movies = await res.json();
+//         displayMovies(movies);
+//         console.log(movies);
+//     } catch (err) {
+//         console.error(err);
+//     }
+// };
 
 // const displayMovies = (films) => {
 //     const htmlString = Array.from(films)
@@ -69,14 +69,17 @@ function showMovies(data){
 
     main.innerHTML = '';
     data.forEach(movie => {
-        if(movie.poster_path == null){
-            console.log('ET NON');
-        }
+
         // Object destructuring : get a chosen set of info from an object
         const movieElt = document.createElement('div');
         movieElt.classList.add('movie');
-        movieElt.innerHTML = 
+        if(movie.poster_path == undefined || null){
+            movieElt.style.display = "none";
+        }else{
+            movieElt.innerHTML = 
             '<img src="' + IMG_URL + movie.poster_path + '" alt="' + movie.title + '"><div class="movie-info"><h3>' + movie.title + '</h3><span class="' + getColor(movie.vote_average) + '">' + movie.vote_average + '</span></div><div class="overview"><h3>Overview</h3>'+ movie.overview + '</div>'
+        }
+
         main.appendChild(movieElt);
     });
 }
@@ -121,6 +124,13 @@ form.addEventListener("keyup", e => {
   getMovies('https://api.themoviedb.org/3/search/movie?api_key=6306a5921402700a1b44ea0634197368&query='+filteredMovies);
 
   showMovies(filteredMovies);
+
+
+  //IF SEARCH IS EMPTY BACK TO POPULAR MOVIES
+    if(searchString.innerHTML == ''){
+        getMovies(API_URL);
+    }
+
 });
 
 // searchBar.addEventListener("keydown", e => {
