@@ -46,7 +46,7 @@ const loadMovies = async () => {
 const API_KEY = 'api_key=6306a5921402700a1b44ea0634197368';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const API_URL = BASE_URL + '/discover/movie?sort_by=popularity.desc&'+API_KEY;
-const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+const IMG_URL = 'https://image.tmdb.org/t/p/w500/';
 const searchURL = BASE_URL + '/search/movie?'+API_KEY+'&query=';
 
 
@@ -54,64 +54,74 @@ const main = document.getElementById('main');
 const form = document.getElementById('form');
 const search = document.getElementById('search');
 
-// getMovies(API_URL);
 
-// function getMovies(url){
-//     fetch(url).then(res => res.json()).then(data => {
+//Gather data of popular movies
+getMovies(API_URL);
 
-//         showMovies(data.results);
-//         }    
-//     )
-// }
+function getMovies(url){
+    fetch(url).then(res => res.json()).then(data => {
+        showMovies(data.results);
+        }    
+    )
+}
 
-// function showMovies(data){
+function showMovies(data){
 
-//     main.innerHTML = '';
-//     data.forEach(movie => {
-//         // Object destructuring : get a chosen set of info from an object
-//         const movieElt = document.createElement('div');
-//         movieElt.classList.add('movie');
-//         movieElt.innerHTML = 
-//             '<img src="' + IMG_URL+movie.poster_path + '" alt="' + movie.title + '"><div class="movie-info"><h3>' + movie.title + '</h3><span class="' + getColor(movie.vote_average) + '">' + movie.vote_average + '</span></div><div class="overview"><h3>Overview</h3>'+ movie.overview + '</div>'
-//         main.appendChild(movieElt);
-//     });
-// }
+    main.innerHTML = '';
+    data.forEach(movie => {
+        if(movie.poster_path == null){
+            console.log('ET NON');
+        }
+        // Object destructuring : get a chosen set of info from an object
+        const movieElt = document.createElement('div');
+        movieElt.classList.add('movie');
+        movieElt.innerHTML = 
+            '<img src="' + IMG_URL + movie.poster_path + '" alt="' + movie.title + '"><div class="movie-info"><h3>' + movie.title + '</h3><span class="' + getColor(movie.vote_average) + '">' + movie.vote_average + '</span></div><div class="overview"><h3>Overview</h3>'+ movie.overview + '</div>'
+        main.appendChild(movieElt);
+    });
+}
 
-// function getColor(vote){
-//     if(vote >=8){
-//         return 'green';
-//     }else if(vote >=5){
-//         return 'orange';
-//     }else{
-//         return 'red';
-//     }
-// }
+function getColor(vote){
+    if(vote >=8){
+        return 'green';
+    }else if(vote >=5){
+        return 'orange';
+    }else{
+        return 'red';
+    }
+}
 
 
-// form.addEventListener('submit', (e) =>{
-//     e.preventDefault();
+form.addEventListener('submit', (e) =>{
+    e.preventDefault();
 
-//     const searchTerm = search.value;
+    const searchTerm = search.value;
 
-//     if(searchTerm) {
-//         getMovies(searchURL+'&query='+searchTerm);
-//     }
-// })
+    if(searchTerm) {
+        getMovies(searchURL+'&query='+searchTerm);
+    }
+})
 
-// form.addEventListener("keydown", e => {
 
-//     const searchString = e.target.value.toLowerCase();
 
-//     const filteredMovies = Array.from(searchString).filter(film => {
-//     return (
-//       film.includes(searchString)
-//     );
-//   });
-//   console.log(filteredMovies);
-//   getMovies(searchURL+'&query='+filteredMovies);
 
-//   showMovies(filteredMovies);
-// });
+form.addEventListener("keyup", e => {
+    let searchString = [];
+    searchString.push(e.target.value.toLowerCase());
+
+        console.log(searchString);
+    
+    const filteredMovies = searchString.filter(film => {
+
+    return (
+      film.includes(searchString)
+    );
+    
+  });
+  getMovies('https://api.themoviedb.org/3/search/movie?api_key=6306a5921402700a1b44ea0634197368&query='+filteredMovies);
+
+  showMovies(filteredMovies);
+});
 
 // searchBar.addEventListener("keydown", e => {
 //   const searchString = e.target.value.toLowerCase();
@@ -123,20 +133,3 @@ const search = document.getElementById('search');
 //   });
 //   displayMovies(filteredCharacters);
 // });
-
-const searchMovies = async searchText => {
-    const res = await fetch(url);
-    const movies = await res.json;
-
-    let matches = array.from(movies).filter(movie =>{
-        const regex = new RegExp(`^${searchText}`, 'gi');
-        return movie.match(regex);
-    });
-
-    if(searchText.length === 0){
-        movies = [];
-    }
-    console.log(matches);
-};
-
-search.addEventListener('input', () => searchMovies(searchURL+search.value));
